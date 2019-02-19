@@ -1,1 +1,49 @@
+package calculadora;
+
+import static javafx.scene.input.KeyCode.T;
+
+public class Calculadora {
+    
+    public static <T> double evaluarPostfijo(String postfijo){
+        double num1;
+        double num2;
+        PilaA<Double> pila = new PilaA();
+        String[] aux = postfijo.split(" ");
+        
+        for(int i = 0; i < aux.length; i++){
+            try{
+                double ope = Double.parseDouble(aux[i]);
+                pila.push(ope);
+            
+            }
+            catch(Exception e){
+                num1 = pila.pop();
+                num2 = pila.pop();
+                switch(aux[i]){
+                    case "+": num2 += num1;
+                    pila.push(num2);
+                    break;
+                    case "-": num2 -= num1;
+                    pila.push(num2);
+                    break;
+                    case "x": num2 *= num1;
+                    pila.push(num2);
+                    break;
+                    case "/": num2 /= num1;
+                    pila.push(num2);
+                    break;
+                    
+                }
+                
+            }
+        }
+        return pila.peek();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(evaluarPostfijo("3 -7 -"));
+        
+    }
+    
+}
 
