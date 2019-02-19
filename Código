@@ -39,6 +39,35 @@ public class Calculadora {
         }
         return pila.peek();
     }
+    
+    
+ public static String eliminarExcesos(String oper) {
+        String aux;
+        int i = 0;
+        int menos = 0;
+        int j;
+        
+        
+        for(i = 0; i < oper.length(); i++){
+            if(oper.charAt(i) == '+' || oper.charAt(i) == '-'){
+                j = i + 1;
+                while (oper.charAt(j) == '-' || oper.charAt(j) == '+'){
+                    if (oper.charAt(j) == '-')
+                        
+                        menos++;
+                    j++;
+                }
+                if (menos % 2 == 0){
+                    oper = oper.substring(0, i) + "+" + oper.substring(j);
+                }
+                else
+                    oper = oper.substring(0, i) + "-" + oper.substring(j);
+            }
+            
+        }
+        
+        return oper;
+    }
 
     public static void main(String[] args) {
         System.out.println(evaluarPostfijo("3 -7 -"));
