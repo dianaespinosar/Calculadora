@@ -1,19 +1,27 @@
 public boolean revisaTodo(String infijo){
-        boolean res=true;
+        boolean res=true, puntos=false;
         PilaA<Character> pila= new PilaA();
-        int j=0;
-        char car, next, before;
+        int i=0;
+        char car=infijo.charAt(0), next, before, ultimo=infijo.charAt(infijo.length()-1);
         
-        while(j<infijo.length() && res){
-            car=infijo.charAt(j);
+        if(car=='*'||car=='/' ){
+                res=false;
+        }
+        if(car=='+'||car=='-')
+            i++;
+        if(ultimo=='*'||ultimo=='/' || ultimo=='+' || ultimo=='-' || ultimo=='.'){
+            res=false;
+        }
+        while(i<infijo.length() && res){
+            car=infijo.charAt(i);
             if(car=='('){
                 pila.push(car);
-                if(j<infijo.length()-1){
-                    next=infijo.charAt(j+1);
+                if(i<infijo.length()-1){
+                    next=infijo.charAt(i+1);
                     if(next=='*'||next=='/'||next==')')
                         res=false;
-                    if(j>0&&res){
-                        before=infijo.charAt(j-1);
+                    if(i>0&&res){
+                        before=infijo.charAt(i-1);
                         if(before!='*'&&before!='+'&&before!='-'&&before!='/'&&before!='(')
                             res=false;
                     }
@@ -25,53 +33,40 @@ public boolean revisaTodo(String infijo){
                         res=false;
                     else{
                         pila.pop();
-                        if(j<infijo.length()-1){
-                            next=infijo.charAt(j+1);
+                        if(i<infijo.length()-1){
+                            next=infijo.charAt(i+1);
                             if(next!='*'&&next!='+'&&next!='-'&&next!='/'&&next!=')')
                             res=false;
                         }
                     }
                     
                 }
-            j++;
+                else{
+                    if(car=='*'||car=='/'){
+                        before=infijo.charAt(i-1);
+                        if(before=='*'||before=='/' || before=='+' || before=='-')
+                            res=false;
+                    }
+                    if(car=='/' && res)
+                        if(infijo.charAt(i+1)=='0')
+                            res=false;
+                    if(puntos && car=='.')
+                        res=false;
+                    if(car=='.'&& res){
+                        puntos=true;
+                        next=infijo.charAt(i+1);
+                        if(!Character.isDigit(next)){
+                            res=false;
+                        }
+                    }
+                    else
+                        if(car=='+' || car=='-'||car=='*' || car=='/')
+                            puntos=false;
+                }
+            i++;
         }
         if(!pila.isEmpty())
             res=false;
         
-        boolean puntos=false;
-        int i=0;
-        char cero=infijo.charAt(0), ultimo=infijo.charAt(infijo.length()-1);
-        
-        if(cero=='*'||cero=='/' ){
-                res=false;
-        }
-        if(cero=='+'||cero=='-')
-            i++;
-        if(ultimo=='*'||ultimo=='/' || ultimo=='+' || ultimo=='-' ){
-            res=false;
-        }
-        i++;
-        while(res && i<infijo.length()){
-            char index=infijo.charAt(i);
-            char unomenos=infijo.charAt(i-1);
-            if(index=='*'||index=='/'){
-                if(unomenos=='*'||unomenos=='/' || unomenos=='+' || unomenos=='-')
-                    res=false;
-            }
-            if(index=='/' && res)
-                if(infijo.charAt(i+1)=='0')
-                    res=false;
-            if(puntos && index=='.')
-                res=false;
-            if(index=='.'&& res){
-                puntos=true;
-            }
-            else
-                if(index=='+' || index=='-'||index=='*' || index=='/')
-                    puntos=false;
-            i++;
-        }
-        //if(!res)
-            //throw new SyntaxError();
         return res;
     }
