@@ -11,7 +11,7 @@ public class Calculadora {
     /**<pre>
      * Revisa que la sintaxis de la expresión escrita en la calculadora sea correcta.
      * 
-     * @param infijo: utiliza como parametro la expresión ingresada por el usuario.
+     * @param infijo: utiliza como parámetro la expresión ingresada por el usuario.
      * @return 
      * Regresará
      * <ul>
@@ -28,7 +28,7 @@ public class Calculadora {
         int i = 0;
         
         //Este if marca error si el primer caracter es es simbolo de multiplicación o división
-        if(car == '*' || car == '/')
+        if(car == '*' || car == '/' || car == ')')
             res = false;
         //Que el primer caracter sea el símbolo de más o de menos es posible y por eso
         //simplemente aumentamos la i.
