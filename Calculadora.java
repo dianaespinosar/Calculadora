@@ -4,7 +4,7 @@ import pila.PilaA;
 
 /**
  * 
- * @author Felipe
+ * @author Felipe, Toño, Diana y Jorge
  */
 public class Calculadora {
     
@@ -23,27 +23,28 @@ public class Calculadora {
     public static boolean revisaTodo(String infijo){
         boolean res = true;
         boolean puntos = false;
-        PilaA<Character> pila = new PilaA(); //Pila utilizada como auxiliar para contener los parentesis abiertos
-        char car = infijo.charAt(0), next, before, ultimo = infijo.charAt(infijo.length()-1); //Se checa el primer y el último caracter del String porque solo se llama al metodo si el String no está vacío.
+        PilaA<Character> pila = new PilaA(); //Pila utilizada como auxiliar para contener los paréntesis abiertos.
+        char car = infijo.charAt(0), next, before, ultimo = infijo.charAt(infijo.length()-1); //Se checa el primer y el último caracter del String porque solo se llama al método si el String no está vacío.
         int i = 0;
         
-        //Este if marca error si el primer caracter es es simbolo de multiplicacion o division
+        //Este if marca error si el primer caracter es es simbolo de multiplicación o división
         if(car == '*' || car == '/')
             res = false;
-        //Por otro lado que el primer caracter sea el simbolo de mas o de menos si es posible
+        //Que el primer caracter sea el símbolo de más o de menos es posible y por eso
+        //simplemente aumentamos la i.
         if(car == '+' || car == '-')
             i++;
-        //Si el ultimo caracter es un operador o un punto se marca error ya que es incongruente
+        //Si el último caracter es un operador o un punto se marca error ya que es incongruente.
         if(ultimo == '*' || ultimo == '/' || ultimo == '+' || ultimo == '-' || ultimo == '.'){
             res = false;
         }
-        //ciclo para recorrer la cadena infija caracter por caracter
+        //Ciclo para recorrer la cadena infija caracter por caracter.
         while(i < infijo.length() && res){
             car = infijo.charAt(i);
             switch (car) {
                 case '(':
                     pila.push(car);
-                    //si hay un parentesis abierto se agrega a la pila
+                    //Si hay un paréntesis abierto se agrega a la pila.
                     if(i < infijo.length()-1){
                         next = infijo.charAt(i+1);
                         if(next == '*' || next == '/' || next == ')')
@@ -57,17 +58,17 @@ public class Calculadora {
                 case ')':
                     before = infijo.charAt(i-1);
                     if(pila.isEmpty())
-                        res = false; //Si se encuentra un parentesis para cerrar y no hay uno abierto en la pila, es porque están incorrectos; es incorrecta la expresión
+                        res = false; //Si se encuentra un paréntesis para cerrar y no hay uno abierto en la pila, es porque están incorrectos; es incorrecta la expresión.
                     else if(before == '*' || before == '+' || before == '-' || before == '/' || before == '(')
                         res = false;
                     else{
                         pila.pop();
-                        //Se elimina de la pila el parentesis que se cerro
+                        //Se elimina de la pila el paréntesis que se cerró.
                         if(i < infijo.length()-1){
                             next = infijo.charAt(i+1);
                             if(next != '*' && next != '+' && next != '-' && next != '/' && next != ')')
-                                //No puede haber un digito o punto después de un parentesis ya que
-                                //no aceptamos los parentesis como multiplicadores
+                                //No puede haber un dígito o punto después de un paréntesis ya que
+                                //no aceptamos los paréntesis como multiplicadores.
                                 res = false;
                         }
                     }
@@ -76,34 +77,41 @@ public class Calculadora {
                     if(car == '*' || car == '/'){
                         next = infijo.charAt(i+1);
                         if(next == '*' || next == '/' || next == '+' || next == '-')
-                            //No se puede tener un operador y despues el simbolo de 
-                            //multiplicación o division; es un error.
+                            //No se puede tener un operador y después el símbolo de 
+                            //multiplicación o división; es un error.
                             res = false;
                     }
-                    //Este if funciona para mandar error si hay dos puntos en un mismo numero
-                    //Si el boolean puntos es true es porque ya hay un punto y el numero no ha terminado
+                    //Este if funciona para mandar error si hay dos puntos en un mismo número.
+                    //Si el boolean puntos es true es porque ya hay un punto y el número no ha terminado.
                     if(puntos && car == '.')
                         res = false;
                     if(car == '.' && res){
                         puntos = true;
-                        //Si encuentra un punto el boolean puntos se vuelve true
+                        //Si encuentra un punto el boolean "puntos" se vuelve true.
                         next = infijo.charAt(i+1);
                         if(!Character.isDigit(next)){
-                            //Este if marca error si lo que esta despues de un punto no es un numero
-                            res = false;
+                            if(!Character.isDigit(next)){
+                                if(i>0){
+                                    before=infijo.charAt(i-1);
+                                    if(!Character.isDigit(before)){
+                                        res=false;
+                                        //Si un punto no tiene un número antes ni después está incorrecto.
+                                    }
+                                }
+                            }
                         }
                     }
                     else
                         if(car == '+' || car == '-' || car == '*' || car == '/'){
-                            //Cada que encuentra un operador regresa puntos a false
-                            //porque ya termino el numero
+                            //Cada que encuentra un operador regresa el boolean "puntos" a false
+                            //porque ya terminó el número.
                             puntos = false;
                         }
                     break;
             }
             i++;
         }
-        //Si la pila no esta vacia significa que un parentesis no se cerro por lo que está incorrecto
+        //Si la pila no esta vacía significa que un paréntesis no se cerró por lo que está incorrecto.
         if(!pila.isEmpty())
             res = false;
         
